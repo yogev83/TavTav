@@ -1,0 +1,17 @@
+#game-view div#play-sound {
+  position: absolute;
+  width: 240px;
+  height: 238px;
+  right: 0;
+  left: 0;
+  top: 200px;
+  margin: auto;
+  background: url(assets/playSoundButton.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+#game-view div#play-sound.pressed {
+  background-position-x: -240px;
+}

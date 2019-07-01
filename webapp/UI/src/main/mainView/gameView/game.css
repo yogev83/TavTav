@@ -1,0 +1,11 @@
+div#game-view {
+  position: relative;
+  top: 100px;
+  width: 40%;
+  height: 600px;
+  margin: auto;
+  background: #3c3c3c;
+  border: 6px solid #3bd374;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px grey;
+}

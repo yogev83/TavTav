@@ -1,0 +1,12 @@
+.login-dialog {
+  width: 360px;
+  height: 200px;
+}
+
+.login-dialog div#register {
+  color: #6052b9;
+  font-family: cursive;
+  font-weight: 700;
+  font-size: small;
+  cursor: pointer;
+}

@@ -1,0 +1,24 @@
+div#header {
+  position: relative;
+  width: 100%;
+  height: 60px;
+  font-size: large;
+  color: black;
+  background: #3bd374;
+  box-shadow: 5px 5px 10px grey;
+}
+
+div#header #login,
+div#header #welcome {
+  position: relative;
+  float: right;
+  margin: 20px 50px;
+}
+
+div#header #login {
+  cursor: pointer;
+}
+
+div#header #welcome {
+  display: none;
+}
