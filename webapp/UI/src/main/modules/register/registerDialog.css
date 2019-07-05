@@ -2,3 +2,7 @@
   width: 360px;
   height: 400px;
 }
+
+.register-dialog div.form .form-field input {
+  left: 155px;
+}
