@@ -1,13 +1,14 @@
 import Utils from "../../common/utils";
 
 class Dialog {
-  constructor(onOk, options) {
+  constructor(onOk, onClose, options) {
     this.$dialogElement = null;
     this.$dialogContent = null;
     this.$errorContainer = null;
     this.$cancelButton = null;
     this.$okButton = null;
     this.onOk = onOk;
+    this.onClose = onClose;
     this.options = options;
   }
 
@@ -19,6 +20,15 @@ class Dialog {
       this.$cancelButton = this.$dialogElement.find(".cancel-button");
       this.$okButton = this.$dialogElement.find(".ok-button");
       this.$dialogElement.addClass(this.options.className);
+
+      if (this.options.cancelLabel) {
+        this.$cancelButton.html(this.options.cancelLabel);
+      }
+
+      if (this.options.okLabel) {
+        this.$okButton.html(this.options.okLabel);
+      }
+
       this.attachEvents();
     });
   }
@@ -38,33 +48,17 @@ class Dialog {
     });
 
     this.$okButton.mousedown(() => {
-      if (this.$okButton.enabled) {
-        this.$okButton.addClass("active");
-      }
+      this.$okButton.addClass("active");
     });
 
     this.$okButton.mouseup(() => {
-      if (this.$okButton.enabled) {
-        this.$okButton.removeClass("active");
-        this.onOk();
-      }
+      this.$okButton.removeClass("active");
+      this.onOk();
     });
   }
 
-  onContentValidationChanged(valid) {
-    this.enableOkButton(valid);
-  }
-
-  enableOkButton(bool) {
-    if (bool) {
-      this.$okButton.removeClass("disabled");
-    } else {
-      this.$okButton.addClass("disabled");
-    }
-    this.$okButton.enabled = bool;
-  }
-
   close() {
+    this.onClose();
     this.$dialogElement.remove();
   }
 }

@@ -4,9 +4,12 @@ import FormDialogModule from "../formDialog/formDialog";
 class LoginModule extends FormDialogModule {
   constructor($container) {
     super($container);
-    this.className = "login-dialog";
     this.formTemplate = "loginForm";
-    this.formError = "Invalid username or password!";
+    this.formError = "Invalid username or password";
+    this.dialogOptions = {
+      className: "login-dialog",
+      okLabel: "Login"
+    };
   }
 
   create(onLogin, onNotRegisterdClick) {
@@ -16,7 +19,7 @@ class LoginModule extends FormDialogModule {
         $(this.dialog.getContent())
           .find("#register")
           .click(() => {
-            this.dialog.close();
+            this.close();
             onNotRegisterdClick();
           });
       }, 100);

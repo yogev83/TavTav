@@ -7,4 +7,4 @@ import MainController from "./mainController";
     let controller = new MainController();
     controller.start();
   });
-})((window.tzofit = {}));
+})((window.tavtav = {}));

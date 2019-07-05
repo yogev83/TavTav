@@ -1,18 +1,26 @@
 import Utils from "../utils";
 
 class Form {
+  static get validationState() {
+    return {
+      UNSET: "unset",
+      VALID: "valid",
+      INVALID: "invalid"
+    };
+  }
+
   constructor(formTemplate, options) {
     this.$container = null;
     this.$formElement = null;
     this.$errorContainer = null;
     this.formTemplate = formTemplate;
+    this.validState = Form.validationState.UNSET;
     this.options = options;
     this.data = {};
   }
 
-  create($container, onValidStateChanged) {
+  create($container) {
     this.$container = $container;
-    this.onValidStateChanged = onValidStateChanged;
     return Utils.getTemplate(this.formTemplate).then(html => {
       $container.append(html);
       this.$formElement = $container.find("div.form");
@@ -27,7 +35,11 @@ class Form {
     let $inputBuffer = null;
     $.each(this.$fields, (i, field) => {
       $inputBuffer = $($(field).find("input"));
-      $inputBuffer.change(this.validate.bind(this));
+      $inputBuffer.change(() => {
+        if (this.validState == Form.validationState.INVALID) {
+          this.validate.call(this);
+        }
+      });
     });
   }
 
@@ -60,18 +72,30 @@ class Form {
 
   validate() {
     let valid = true;
+    let currentValid = true;
     let $inputBuffer = null;
     $.each(this.$fields, (i, field) => {
-      if (!valid) {
-        return;
+      $inputBuffer = $($(field).find("input"));
+      currentValid = $inputBuffer.val() !== "";
+
+      if (!currentValid) {
+        $inputBuffer.addClass("invalid");
+      } else {
+        $inputBuffer.removeClass("invalid");
       }
 
-      $inputBuffer = $($(field).find("input"));
-      valid = valid && $inputBuffer.val() !== "";
+      valid = valid && currentValid;
     });
 
-    valid ? this.hideError() : this.showError();
-    this.onValidStateChanged(valid);
+    if (valid) {
+      this.hideError();
+      this.validState = Form.validationState.VALID;
+    } else {
+      this.showError();
+      this.validState = Form.validationState.INVALID;
+    }
+
+    return valid;
   }
 }
 

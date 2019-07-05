@@ -58,6 +58,36 @@ div#main-view {
   background-repeat: no-repeat;
 }
 
+.login-dialog {
+  width: 360px;
+  height: 200px;
+}
+
+.login-dialog div#register {
+  color: #6052b9;
+  font-family: cursive;
+  font-weight: 700;
+  font-size: small;
+  cursor: pointer;
+}
+
+.register-dialog {
+  width: 360px;
+  height: 400px;
+}
+
+div#game-view {
+  position: relative;
+  top: 100px;
+  width: 40%;
+  height: 600px;
+  margin: auto;
+  background: #3c3c3c;
+  border: 6px solid #3bd374;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px grey;
+}
+
 .dialog {
   position: absolute;
   left: 0;
@@ -95,15 +125,13 @@ div.dialog .dialog-footer .dialog-buttons button {
   cursor: pointer;
 }
 
-div.dialog .dialog-buttons button.disabled {
-  opacity: 0.7;
-  background: lightgray;
+div.dialog .dialog-footer .dialog-buttons button.cancel-button {
+  background: lightgrey;
 }
 
 div.dialog .dialog-buttons button.active {
   background: #88a;
 }
-
 div.form {
   position: relative;
   height: 100%;
@@ -118,39 +146,13 @@ div.form .form-field input {
   left: 100px;
 }
 
+div.form .form-field input.invalid {
+  border: 2px solid red;
+}
+
 div.form div.form-error-message {
   color: red;
   display: none;
-}
-
-div#game-view {
-  position: relative;
-  top: 100px;
-  width: 40%;
-  height: 600px;
-  margin: auto;
-  background: #3c3c3c;
-  border: 6px solid #3bd374;
-  border-radius: 10px;
-  box-shadow: 5px 5px 10px grey;
-}
-
-.login-dialog {
-  width: 360px;
-  height: 200px;
-}
-
-.login-dialog div#register {
-  color: #6052b9;
-  font-family: cursive;
-  font-weight: 700;
-  font-size: small;
-  cursor: pointer;
-}
-
-.register-dialog {
-  width: 360px;
-  height: 400px;
 }
 
 #game-view div#play-sound {
@@ -168,7 +170,7 @@ div#game-view {
 }
 
 #game-view div#play-sound.pressed {
-  background-position-x: -240px;
+  background-position-x: -241.5px;
 }
 
 #game-view div#play-button {

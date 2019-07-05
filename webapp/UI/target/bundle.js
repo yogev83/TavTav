@@ -70,7 +70,7 @@
 "use strict";
 class Utils {
   getTemplate(htmlName) {
-    let $getTemplate = $.get(tzofit.templatesPath + htmlName + ".html");
+    let $getTemplate = $.get(tavtav.templatesPath + htmlName + ".html");
     return $.when($getTemplate);
   }
 
@@ -127,27 +127,31 @@ class FormDialogModule {
     this.dialog = null;
     this.form = null;
     this.$container = $("#main");
+    this.okPressed = false;
   }
 
   create(handler) {
     this.handler = handler;
-    this.dialog = new __WEBPACK_IMPORTED_MODULE_0__common_dialog_dialog__["a" /* default */](this.onOk.bind(this), {
-      className: this.className
-    });
+    this.dialog = new __WEBPACK_IMPORTED_MODULE_0__common_dialog_dialog__["a" /* default */](this.onOk.bind(this), this.onClose.bind(this), this.dialogOptions);
 
     this.form = new __WEBPACK_IMPORTED_MODULE_1__common_form_form__["a" /* default */](this.formTemplate, { formError: this.formError });
 
     return this.dialog.create(this.$container).then(() => {
       __WEBPACK_IMPORTED_MODULE_2__common_utils__["a" /* default */].showOverlay();
       return this.form.create(
-        this.dialog.getContent(),
-        this.dialog.onContentValidationChanged.bind(this.dialog)
+        this.dialog.getContent()
       );
     });
   }
 
   onOk() {
-    var data = this.form.getData();
+    let data;
+    let valid = this.form.validate();
+    if (!valid) {
+      return;
+    }
+
+    data = this.form.getData();
     this.action(data)
       .then(response => {
         this.close();
@@ -159,6 +163,9 @@ class FormDialogModule {
 
   close() {
     this.dialog.close();
+  }
+
+  onClose() {
     delete this.dialog;
     __WEBPACK_IMPORTED_MODULE_2__common_utils__["a" /* default */].hideOverlay();
   }
@@ -183,7 +190,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     let controller = new __WEBPACK_IMPORTED_MODULE_0__mainController__["a" /* default */]();
     controller.start();
   });
-})((window.tzofit = {}));
+})((window.tavtav = {}));
 
 
 /***/ }),
@@ -286,9 +293,12 @@ class BodyController {
 class LoginModule extends __WEBPACK_IMPORTED_MODULE_1__formDialog_formDialog__["a" /* default */] {
   constructor($container) {
     super($container);
-    this.className = "login-dialog";
     this.formTemplate = "loginForm";
-    this.formError = "Invalid username or password!";
+    this.formError = "Invalid username or password";
+    this.dialogOptions = {
+      className: "login-dialog",
+      okLabel: "Login"
+    };
   }
 
   create(onLogin, onNotRegisterdClick) {
@@ -298,7 +308,7 @@ class LoginModule extends __WEBPACK_IMPORTED_MODULE_1__formDialog_formDialog__["
         $(this.dialog.getContent())
           .find("#register")
           .click(() => {
-            this.dialog.close();
+            this.close();
             onNotRegisterdClick();
           });
       }, 100);
@@ -372,13 +382,14 @@ class UserService {
 
 
 class Dialog {
-  constructor(onOk, options) {
+  constructor(onOk, onClose, options) {
     this.$dialogElement = null;
     this.$dialogContent = null;
     this.$errorContainer = null;
     this.$cancelButton = null;
     this.$okButton = null;
     this.onOk = onOk;
+    this.onClose = onClose;
     this.options = options;
   }
 
@@ -390,6 +401,15 @@ class Dialog {
       this.$cancelButton = this.$dialogElement.find(".cancel-button");
       this.$okButton = this.$dialogElement.find(".ok-button");
       this.$dialogElement.addClass(this.options.className);
+
+      if (this.options.cancelLabel) {
+        this.$cancelButton.html(this.options.cancelLabel);
+      }
+
+      if (this.options.okLabel) {
+        this.$okButton.html(this.options.okLabel);
+      }
+
       this.attachEvents();
     });
   }
@@ -409,33 +429,17 @@ class Dialog {
     });
 
     this.$okButton.mousedown(() => {
-      if (this.$okButton.enabled) {
-        this.$okButton.addClass("active");
-      }
+      this.$okButton.addClass("active");
     });
 
     this.$okButton.mouseup(() => {
-      if (this.$okButton.enabled) {
-        this.$okButton.removeClass("active");
-        this.onOk();
-      }
+      this.$okButton.removeClass("active");
+      this.onOk();
     });
   }
 
-  onContentValidationChanged(valid) {
-    this.enableOkButton(valid);
-  }
-
-  enableOkButton(bool) {
-    if (bool) {
-      this.$okButton.removeClass("disabled");
-    } else {
-      this.$okButton.addClass("disabled");
-    }
-    this.$okButton.enabled = bool;
-  }
-
   close() {
+    this.onClose();
     this.$dialogElement.remove();
   }
 }
@@ -452,18 +456,26 @@ class Dialog {
 
 
 class Form {
+  static get validationState() {
+    return {
+      UNSET: "unset",
+      VALID: "valid",
+      INVALID: "invalid"
+    };
+  }
+
   constructor(formTemplate, options) {
     this.$container = null;
     this.$formElement = null;
     this.$errorContainer = null;
     this.formTemplate = formTemplate;
+    this.validState = Form.validationState.UNSET;
     this.options = options;
     this.data = {};
   }
 
-  create($container, onValidStateChanged) {
+  create($container) {
     this.$container = $container;
-    this.onValidStateChanged = onValidStateChanged;
     return __WEBPACK_IMPORTED_MODULE_0__utils__["a" /* default */].getTemplate(this.formTemplate).then(html => {
       $container.append(html);
       this.$formElement = $container.find("div.form");
@@ -478,7 +490,11 @@ class Form {
     let $inputBuffer = null;
     $.each(this.$fields, (i, field) => {
       $inputBuffer = $($(field).find("input"));
-      $inputBuffer.change(this.validate.bind(this));
+      $inputBuffer.change(() => {
+        if (this.validState == Form.validationState.INVALID) {
+          this.validate.call(this);
+        }
+      });
     });
   }
 
@@ -511,18 +527,30 @@ class Form {
 
   validate() {
     let valid = true;
+    let currentValid = true;
     let $inputBuffer = null;
     $.each(this.$fields, (i, field) => {
-      if (!valid) {
-        return;
+      $inputBuffer = $($(field).find("input"));
+      currentValid = $inputBuffer.val() !== "";
+
+      if (!currentValid) {
+        $inputBuffer.addClass("invalid");
+      } else {
+        $inputBuffer.removeClass("invalid");
       }
 
-      $inputBuffer = $($(field).find("input"));
-      valid = valid && $inputBuffer.val() !== "";
+      valid = valid && currentValid;
     });
 
-    valid ? this.hideError() : this.showError();
-    this.onValidStateChanged(valid);
+    if (valid) {
+      this.hideError();
+      this.validState = Form.validationState.VALID;
+    } else {
+      this.showError();
+      this.validState = Form.validationState.INVALID;
+    }
+
+    return valid;
   }
 }
 
@@ -542,9 +570,13 @@ class Form {
 class RegisterModule extends __WEBPACK_IMPORTED_MODULE_0__formDialog_formDialog__["a" /* default */] {
   constructor($container) {
     super($container);
-    this.className = "register-dialog";
     this.formTemplate = "registerForm";
     this.formError = "All values must be valid!";
+    this.dialogOptions = {
+      className: "register-dialog",
+      cancelLabel: "Not Now",
+      okLabel: "Register"
+    };
   }
 
   action(data) {
@@ -629,6 +661,7 @@ class Welcome {
 
 class Play {
   constructor($view) {
+    this.ctx = new AudioContext();
     this.$view = $view;
   }
 
@@ -648,7 +681,15 @@ class Play {
   }
 
   playSound() {
-    console.warn("play sound");
+    let o = this.ctx.createOscillator();
+    let  g = this.ctx.createGain(); 
+    o.connect(g);
+    o.type = "triangle";
+    g.connect(this.ctx.destination);
+    o.start(0);
+    g.gain.exponentialRampToValueAtTime(
+      0.00001, this.ctx.currentTime + 1
+    )
   }
 }
 

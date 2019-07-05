@@ -2,6 +2,7 @@ import Utils from "../../../common/utils";
 
 class Play {
   constructor($view) {
+    this.ctx = new AudioContext();
     this.$view = $view;
   }
 
@@ -21,7 +22,15 @@ class Play {
   }
 
   playSound() {
-    console.warn("play sound");
+    let o = this.ctx.createOscillator();
+    let  g = this.ctx.createGain(); 
+    o.connect(g);
+    o.type = "triangle";
+    g.connect(this.ctx.destination);
+    o.start(0);
+    g.gain.exponentialRampToValueAtTime(
+      0.00001, this.ctx.currentTime + 1
+    )
   }
 }
 

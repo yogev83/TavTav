@@ -1,5 +1,5 @@
 const path = require("path");
-const dist = "C:/projects/QA/webapp/UI/target";
+const dist = "C:/projects/TavTav/webapp/UI/target";
 
 module.exports = {
   entry: "./src/main/main.js",

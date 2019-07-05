@@ -7,7 +7,7 @@ var gutil = require("gulp-util");
 var webpack = require("webpack");
 var webpackConfig = require("./webpack.config.js");
 
-var dist = "C:/projects/QA/webapp/UI/target";
+var dist = "C:/projects/TavTav/webapp/UI/target";
 
 gulp.task("clean", function() {
   return gulp.src(dist, { read: false }).pipe(clean({ force: true }));

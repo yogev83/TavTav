@@ -1,6 +1,6 @@
 class Utils {
   getTemplate(htmlName) {
-    let $getTemplate = $.get(tzofit.templatesPath + htmlName + ".html");
+    let $getTemplate = $.get(tavtav.templatesPath + htmlName + ".html");
     return $.when($getTemplate);
   }
 

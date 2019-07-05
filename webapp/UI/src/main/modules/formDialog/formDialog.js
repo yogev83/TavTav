@@ -7,27 +7,31 @@ class FormDialogModule {
     this.dialog = null;
     this.form = null;
     this.$container = $("#main");
+    this.okPressed = false;
   }
 
   create(handler) {
     this.handler = handler;
-    this.dialog = new Dialog(this.onOk.bind(this), {
-      className: this.className
-    });
+    this.dialog = new Dialog(this.onOk.bind(this), this.onClose.bind(this), this.dialogOptions);
 
     this.form = new Form(this.formTemplate, { formError: this.formError });
 
     return this.dialog.create(this.$container).then(() => {
       Utils.showOverlay();
       return this.form.create(
-        this.dialog.getContent(),
-        this.dialog.onContentValidationChanged.bind(this.dialog)
+        this.dialog.getContent()
       );
     });
   }
 
   onOk() {
-    var data = this.form.getData();
+    let data;
+    let valid = this.form.validate();
+    if (!valid) {
+      return;
+    }
+
+    data = this.form.getData();
     this.action(data)
       .then(response => {
         this.close();
@@ -39,6 +43,9 @@ class FormDialogModule {
 
   close() {
     this.dialog.close();
+  }
+
+  onClose() {
     delete this.dialog;
     Utils.hideOverlay();
   }

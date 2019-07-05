@@ -4,9 +4,13 @@ import mockServer from "../../../mockServer/mockServer";
 class RegisterModule extends FormDialogModule {
   constructor($container) {
     super($container);
-    this.className = "register-dialog";
     this.formTemplate = "registerForm";
     this.formError = "All values must be valid!";
+    this.dialogOptions = {
+      className: "register-dialog",
+      cancelLabel: "Not Now",
+      okLabel: "Register"
+    };
   }
 
   action(data) {

@@ -12,6 +12,10 @@ div.form .form-field input {
   left: 100px;
 }
 
+div.form .form-field input.invalid {
+  border: 2px solid red;
+}
+
 div.form div.form-error-message {
   color: red;
   display: none;
