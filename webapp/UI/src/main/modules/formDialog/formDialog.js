@@ -12,15 +12,19 @@ class FormDialogModule {
 
   create(handler) {
     this.handler = handler;
-    this.dialog = new Dialog(this.onOk.bind(this), this.onClose.bind(this), this.dialogOptions);
+    this.dialog = new Dialog(
+      this.onOk.bind(this),
+      this.onClose.bind(this),
+      this.dialogOptions
+    );
 
     this.form = new Form(this.formTemplate, { formError: this.formError });
 
     return this.dialog.create(this.$container).then(() => {
       Utils.showOverlay();
-      return this.form.create(
-        this.dialog.getContent()
-      );
+      return this.form.create(this.dialog.getContent()).then(() => {
+        $($(this.dialog.getContent()).find("input")[0]).focus();
+      });
     });
   }
 

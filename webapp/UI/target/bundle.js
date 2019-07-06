@@ -132,15 +132,19 @@ class FormDialogModule {
 
   create(handler) {
     this.handler = handler;
-    this.dialog = new __WEBPACK_IMPORTED_MODULE_0__common_dialog_dialog__["a" /* default */](this.onOk.bind(this), this.onClose.bind(this), this.dialogOptions);
+    this.dialog = new __WEBPACK_IMPORTED_MODULE_0__common_dialog_dialog__["a" /* default */](
+      this.onOk.bind(this),
+      this.onClose.bind(this),
+      this.dialogOptions
+    );
 
     this.form = new __WEBPACK_IMPORTED_MODULE_1__common_form_form__["a" /* default */](this.formTemplate, { formError: this.formError });
 
     return this.dialog.create(this.$container).then(() => {
       __WEBPACK_IMPORTED_MODULE_2__common_utils__["a" /* default */].showOverlay();
-      return this.form.create(
-        this.dialog.getContent()
-      );
+      return this.form.create(this.dialog.getContent()).then(() => {
+        $($(this.dialog.getContent()).find("input")[0]).focus();
+      });
     });
   }
 
