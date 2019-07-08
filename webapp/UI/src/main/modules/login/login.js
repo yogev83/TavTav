@@ -5,7 +5,6 @@ class LoginModule extends FormDialogModule {
   constructor($container) {
     super($container);
     this.formTemplate = "loginForm";
-    this.formError = "Invalid username or password";
     this.dialogOptions = {
       className: "login-dialog",
       okLabel: "Login"

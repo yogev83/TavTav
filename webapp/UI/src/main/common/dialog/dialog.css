@@ -27,7 +27,7 @@ div.dialog .dialog-footer .dialog-buttons button {
   margin-left: 20px;
   width: 100px;
   height: 40px;
-  background: lightblue;
+  background: #ffea52;
   border: none;
   border-radius: 5px;
   outline: unset;
@@ -36,9 +36,9 @@ div.dialog .dialog-footer .dialog-buttons button {
 }
 
 div.dialog .dialog-footer .dialog-buttons button.cancel-button {
-  background: lightgrey;
+  background: lightgray;
 }
 
 div.dialog .dialog-buttons button.active {
-  background: #88a;
+  background: #77714a;
 }

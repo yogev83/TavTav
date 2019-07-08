@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -93,7 +93,30 @@ class Utils {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_userService__ = __webpack_require__(7);
+class FormFieldValidation {
+  constructor(isValid = true, error = "") {
+    this.isValid = isValid;
+    this.error = error;
+  }
+
+  setValidStatus(isValid) {
+    this.isValid = isValid;
+  }
+
+  setError(error) {
+    this.error = error;
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (FormFieldValidation);
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_userService__ = __webpack_require__(9);
 
 
 class MockServer {
@@ -111,12 +134,12 @@ class MockServer {
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common_dialog_dialog__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_form_form__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common_dialog_dialog__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_form_form__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_utils__ = __webpack_require__(0);
 
 
@@ -128,6 +151,8 @@ class FormDialogModule {
     this.form = null;
     this.$container = $("#main");
     this.okPressed = false;
+
+    this.formOptions = this.formOptions || {};
   }
 
   create(handler) {
@@ -138,7 +163,7 @@ class FormDialogModule {
       this.dialogOptions
     );
 
-    this.form = new __WEBPACK_IMPORTED_MODULE_1__common_form_form__["a" /* default */](this.formTemplate, { formError: this.formError });
+    this.form = new __WEBPACK_IMPORTED_MODULE_1__common_form_form__["a" /* default */](this.formTemplate, this.formOptions);
 
     return this.dialog.create(this.$container).then(() => {
       __WEBPACK_IMPORTED_MODULE_2__common_utils__["a" /* default */].showOverlay();
@@ -179,12 +204,64 @@ class FormDialogModule {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__basicStringValidators__ = __webpack_require__(12);
+
+
+class FormFieldValidators extends __WEBPACK_IMPORTED_MODULE_0__basicStringValidators__["a" /* default */] {
+  static get consts() {
+    return {
+      NAME_MAX_LENGTH: 16,
+      PASSWORD_MIN_LENGTH: 6,
+      PASSWORD_MAX_LENGTH: 12
+    };
+  }
+
+  username(username) {
+    let validation = this.startsWithLetter(username);
+    if (validation.isValid) {
+      validation = this.alphaNumeric(username);
+    }
+    return validation;
+  }
+
+  name(name) {
+    let validation = this.onlyLetters(name);
+    if (validation.isValid) {
+      validation = this.maxLength(
+        name,
+        FormFieldValidators.consts.NAME_MAX_LENGTH
+      );
+    }
+    return validation;
+  }
+
+  password(password) {
+    let validation = this.alphaNumeric(password);
+    if (validation.isValid) {
+      validation = this.lengthBetween(
+        password,
+        FormFieldValidators.consts.PASSWORD_MIN_LENGTH,
+        FormFieldValidators.consts.PASSWORD_MAX_LENGTH
+      );
+    }
+    return validation;
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (new FormFieldValidators());
+
+
+/***/ }),
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mainController__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mainController__ = __webpack_require__(6);
 
 
 (scope => {
@@ -198,12 +275,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mainView_bodyController__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__header_headerController__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mainView_bodyController__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__header_headerController__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_utils__ = __webpack_require__(0);
 
 
@@ -242,13 +319,13 @@ class MainController {
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_login_login__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_register_register__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gameView_game__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_login_login__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_register_register__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gameView_game__ = __webpack_require__(14);
 
 
 
@@ -285,12 +362,12 @@ class BodyController {
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mockServer_mockServer__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__formDialog_formDialog__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mockServer_mockServer__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__formDialog_formDialog__ = __webpack_require__(3);
 
 
 
@@ -298,7 +375,6 @@ class LoginModule extends __WEBPACK_IMPORTED_MODULE_1__formDialog_formDialog__["
   constructor($container) {
     super($container);
     this.formTemplate = "loginForm";
-    this.formError = "Invalid username or password";
     this.dialogOptions = {
       className: "login-dialog",
       okLabel: "Login"
@@ -331,7 +407,7 @@ class LoginModule extends __WEBPACK_IMPORTED_MODULE_1__formDialog_formDialog__["
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -378,7 +454,7 @@ class UserService {
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -452,11 +528,15 @@ class Dialog {
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__formFieldValidators__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__fromFieldValidation__ = __webpack_require__(1);
+
+
 
 
 class Form {
@@ -481,16 +561,19 @@ class Form {
   create($container) {
     this.$container = $container;
     return __WEBPACK_IMPORTED_MODULE_0__utils__["a" /* default */].getTemplate(this.formTemplate).then(html => {
-      $container.append(html);
-      this.$formElement = $container.find("div.form");
-      this.$errorContainer = this.$formElement.find(".form-error-message");
-      this.$errorContainer.append("<p></p>");
-      this.$fields = this.$formElement.find(".form-field");
-      this.attachEvents();
+      __WEBPACK_IMPORTED_MODULE_0__utils__["a" /* default */].getTemplate("fieldError").then(errorElement => {
+        this.errorElement = errorElement;
+        $container.append(html);
+        this.$formElement = $container.find("div.form");
+        this.$errorContainer = this.$formElement.find(".form-error-message");
+        this.$errorContainer.append("<p></p>");
+        this.$fields = this.$formElement.find(".form-field");
+        this.initFields();
+      });
     });
   }
 
-  attachEvents() {
+  initFields() {
     let $inputBuffer = null;
     $.each(this.$fields, (i, field) => {
       $inputBuffer = $($(field).find("input"));
@@ -519,7 +602,6 @@ class Form {
   }
 
   showError(error) {
-    error = error || this.options.formError;
     this.$errorContainer.find("p").html(error);
     this.$errorContainer.show();
   }
@@ -532,29 +614,80 @@ class Form {
   validate() {
     let valid = true;
     let currentValid = true;
-    let $inputBuffer = null;
+
     $.each(this.$fields, (i, field) => {
-      $inputBuffer = $($(field).find("input"));
-      currentValid = $inputBuffer.val() !== "";
-
-      if (!currentValid) {
-        $inputBuffer.addClass("invalid");
-      } else {
-        $inputBuffer.removeClass("invalid");
-      }
-
+      currentValid = this.validateField($(field));
       valid = valid && currentValid;
     });
 
     if (valid) {
-      this.hideError();
       this.validState = Form.validationState.VALID;
     } else {
-      this.showError();
       this.validState = Form.validationState.INVALID;
     }
 
     return valid;
+  }
+
+  validateField($field) {
+    let $input = $($field.find("input"));
+    let value = $input.val();
+    let fieldValidationName = $field.attr("validation");
+    let validation = new __WEBPACK_IMPORTED_MODULE_2__fromFieldValidation__["a" /* default */]();
+    let customValidators = this.options.validators;
+
+    if ($field.attr("required")) {
+      validation = __WEBPACK_IMPORTED_MODULE_1__formFieldValidators__["a" /* default */].required(value);
+      if (validation.isValid && fieldValidationName) {
+        if (typeof customValidators[fieldValidationName] == "function") {
+          validation = customValidators[fieldValidationName](value);
+        } else if (
+          typeof __WEBPACK_IMPORTED_MODULE_1__formFieldValidators__["a" /* default */][fieldValidationName] == "function"
+        ) {
+          validation = __WEBPACK_IMPORTED_MODULE_1__formFieldValidators__["a" /* default */][fieldValidationName](value);
+        }
+      }
+    } else if (fieldValidationName) {
+      if (typeof customValidators[fieldValidationName] == "function") {
+        validation = customValidators[fieldValidationName](value);
+      } else if (
+        typeof __WEBPACK_IMPORTED_MODULE_1__formFieldValidators__["a" /* default */][fieldValidationName] == "function"
+      ) {
+        validation = __WEBPACK_IMPORTED_MODULE_1__formFieldValidators__["a" /* default */][fieldValidationName](value);
+      }
+    }
+
+    if (!validation.isValid) {
+      $input.addClass("invalid");
+      this.appendErrorToField($field, validation.error);
+    } else {
+      $input.removeClass("invalid");
+      this.removeErrorFromField($field);
+    }
+
+    return validation.isValid;
+  }
+
+  appendErrorToField($field, error) {
+    let $errorElement;
+    let fieldError = $field.find("div.field-error")[0];
+    if (!fieldError) {
+      $field.append(this.errorElement);
+      fieldError = $field.find("div.field-error")[0];
+    }
+    $errorElement = $(fieldError);
+    $errorElement.show();
+    $($errorElement.find("p")[0]).html(error);
+  }
+
+  removeErrorFromField($field) {
+    let $errorElement;
+    let fieldError = $field.find("div.field-error")[0];
+    if (fieldError) {
+      $errorElement = $(fieldError);
+      $errorElement.hide();
+      $($errorElement.find("p")[0]).html("");
+    }
   }
 }
 
@@ -562,12 +695,100 @@ class Form {
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__formDialog_formDialog__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mockServer_mockServer__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fromFieldValidation__ = __webpack_require__(1);
+
+
+
+class BasicStringValidators {
+  required(string) {
+    return new __WEBPACK_IMPORTED_MODULE_0__fromFieldValidation__["a" /* default */](string !== "", "Value is required");
+  }
+
+  onlyLetters(string) {
+    let validation = new __WEBPACK_IMPORTED_MODULE_0__fromFieldValidation__["a" /* default */]();
+    if (!/^[a-z]+$/i.test(string)) {
+      validation.setValidStatus(false);
+      validation.setError("Must contain only letters");
+    }
+    return validation;
+  }
+
+  alphaNumeric(string) {
+    let validation = new __WEBPACK_IMPORTED_MODULE_0__fromFieldValidation__["a" /* default */]();
+    if (!/^[a-z0-9]+$/i.test(string)) {
+      validation.setValidStatus(false);
+      validation.setError("Must contain only letters and numbers");
+    }
+    return validation;
+  }
+
+  startsWithLetter(string) {
+    let validation = new __WEBPACK_IMPORTED_MODULE_0__fromFieldValidation__["a" /* default */]();
+    if (!/^[a-z]+$/i.test(string[0])) {
+      validation.setValidStatus(false);
+      validation.setError("Must start with a letter");
+    }
+    return validation;
+  }
+
+  maxLength(string, maxLength) {
+    let validation = new __WEBPACK_IMPORTED_MODULE_0__fromFieldValidation__["a" /* default */]();
+    if (string.length >= maxLength) {
+      validation.setValidStatus(false);
+      validation.setError("Max length is " + maxLength);
+    }
+    return validation;
+  }
+
+  minLength(string, minLength) {
+    let validation = new __WEBPACK_IMPORTED_MODULE_0__fromFieldValidation__["a" /* default */]();
+    if (string.length <= minLength) {
+      validation.setValidStatus(false);
+      validation.setError("Min length is " + minLength);
+    }
+    return validation;
+  }
+
+  lengthBetween(string, minLength, maxLength) {
+    let validation = this.minLength(string, minLength);
+    if (validation.isValid) {
+      validation = this.maxLength(string, maxLength);
+    }
+    return validation;
+  }
+
+  email(string) {
+    let validation = new __WEBPACK_IMPORTED_MODULE_0__fromFieldValidation__["a" /* default */]();
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(string)) {
+      validation.setValidStatus(false);
+      validation.setError("Must be a valid email");
+    }
+    return validation;
+  }
+
+  match(string1, string2) {
+    return new __WEBPACK_IMPORTED_MODULE_0__fromFieldValidation__["a" /* default */](string1 == string2, "Do not match");
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (BasicStringValidators);
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__formDialog_formDialog__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mockServer_mockServer__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_form_formFieldValidators__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__common_form_fromFieldValidation__ = __webpack_require__(1);
+
+
 
 
 
@@ -575,11 +796,15 @@ class RegisterModule extends __WEBPACK_IMPORTED_MODULE_0__formDialog_formDialog_
   constructor($container) {
     super($container);
     this.formTemplate = "registerForm";
-    this.formError = "All values must be valid!";
     this.dialogOptions = {
       className: "register-dialog",
       cancelLabel: "Not Now",
       okLabel: "Register"
+    };
+    this.formOptions = {
+      validators: {
+        password: this.passwordValidation
+      }
     };
   }
 
@@ -587,18 +812,36 @@ class RegisterModule extends __WEBPACK_IMPORTED_MODULE_0__formDialog_formDialog_
     let userService = __WEBPACK_IMPORTED_MODULE_1__mockServer_mockServer__["a" /* default */].getService("user");
     return userService.register(data);
   }
+
+  passwordValidation(passwordValue) {
+    let validation = new __WEBPACK_IMPORTED_MODULE_3__common_form_fromFieldValidation__["a" /* default */]();
+    let password = $(".form-field input[name='password']").val();
+    let reEnterPassword = $(".form-field input[name='reEnterPassword']").val();
+
+    validation = __WEBPACK_IMPORTED_MODULE_2__common_form_formFieldValidators__["a" /* default */].password(passwordValue);
+    if (validation.isValid) {
+      if (password && reEnterPassword) {
+        validation = __WEBPACK_IMPORTED_MODULE_2__common_form_formFieldValidators__["a" /* default */].match(password, reEnterPassword);
+        if (!validation.isValid) {
+          validation.setError("Passwords " + validation.error);
+        }
+      }
+    }
+
+    return validation;
+  }
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (RegisterModule);
 
 
 /***/ }),
-/* 11 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__welcomeScreen_welcome__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__playScreen_play__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__welcomeScreen_welcome__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__playScreen_play__ = __webpack_require__(16);
 
 
 
@@ -624,7 +867,7 @@ class Game {
 
 
 /***/ }),
-/* 12 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -656,7 +899,7 @@ class Welcome {
 
 
 /***/ }),
-/* 13 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -701,12 +944,12 @@ class Play {
 
 
 /***/ }),
-/* 14 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mockServer_mockServer__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__session_session__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mockServer_mockServer__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__session_session__ = __webpack_require__(18);
 
 
 
@@ -742,7 +985,7 @@ class HeaderController {
 
 
 /***/ }),
-/* 15 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

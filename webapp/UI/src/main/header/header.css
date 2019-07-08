@@ -1,18 +1,19 @@
 div#header {
   position: relative;
   width: 100%;
-  height: 60px;
+  height: 50px;
   font-size: large;
-  color: black;
-  background: #3bd374;
-  box-shadow: 5px 5px 10px grey;
+  font-weight: bold;
+  color: #69188b;
+  background: #ffea52;
+  box-shadow: 5px 5px 10px #69188b;
 }
 
 div#header #login,
 div#header #welcome {
   position: relative;
   float: right;
-  margin: 20px 50px;
+  margin: 15px 50px;
 }
 
 div#header #login {

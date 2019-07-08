@@ -1,24 +1,24 @@
 <div id="register-form" class="form">
-  <div class="form-field">
+  <div class="form-field" required validation="name">
     First Name: <input type="text" name="firstname" placeholder="First Name" />
   </div>
-  <div class="form-field">
+  <div class="form-field" required validation="name">
     Last Name: <input type="text" name="lastname" placeholder="Last Name" />
   </div>
-  <div class="form-field">
+  <div class="form-field" required validation="username">
     User Name: <input type="text" name="username" placeholder="User Name" />
   </div>
-  <div class="form-field">
+  <div class="form-field" required validation="email">
     Email: <input type="email" name="email" placeholder="Email" />
   </div>
-  <div class="form-field">
+  <div class="form-field" required validation="password">
     Password: <input type="password" name="password" placeholder="Password" />
   </div>
-  <div class="form-field">
+  <div class="form-field" required validation="password">
     Re-Enter Password:
     <input
       type="password"
-      name="passwordValidation"
+      name="reEnterPassword"
       placeholder="Re-Enter Password"
     />
   </div>

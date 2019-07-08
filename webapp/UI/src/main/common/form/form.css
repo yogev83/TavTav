@@ -4,7 +4,7 @@ div.form {
 }
 
 div.form .form-field {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 div.form .form-field input {
@@ -13,10 +13,18 @@ div.form .form-field input {
 }
 
 div.form .form-field input.invalid {
-  border: 2px solid red;
+  box-shadow: 0px 0px 5px 0px red;
 }
 
 div.form div.form-error-message {
   color: red;
   display: none;
+}
+
+div.form div.field-error {
+  position: absolute;
+  color: red;
+  display: none;
+  margin-left: 100px;
+  font-size: 12px;
 }

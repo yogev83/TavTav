@@ -8,6 +8,8 @@ class FormDialogModule {
     this.form = null;
     this.$container = $("#main");
     this.okPressed = false;
+
+    this.formOptions = this.formOptions || {};
   }
 
   create(handler) {
@@ -18,7 +20,7 @@ class FormDialogModule {
       this.dialogOptions
     );
 
-    this.form = new Form(this.formTemplate, { formError: this.formError });
+    this.form = new Form(this.formTemplate, this.formOptions);
 
     return this.dialog.create(this.$container).then(() => {
       Utils.showOverlay();

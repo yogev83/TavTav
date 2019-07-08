@@ -6,3 +6,9 @@
 .register-dialog div.form .form-field input {
   left: 155px;
 }
+
+.register-dialog div.form div.field-error {
+  color: red;
+  display: none;
+  margin-left: 155px;
+}

@@ -4,9 +4,20 @@
 }
 
 .login-dialog div#register {
+  position: relative;
+  height: 30px;
+  top: -10px;
   color: #6052b9;
   font-family: cursive;
   font-weight: 700;
   font-size: small;
   cursor: pointer;
+}
+
+.login-dialog div#register p {
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  width: 131px;
 }
