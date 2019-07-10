@@ -15,7 +15,7 @@ class FormDialogModule {
   create(handler) {
     this.handler = handler;
     this.dialog = new Dialog(
-      this.onOk.bind(this),
+      this.onAction.bind(this),
       this.onClose.bind(this),
       this.dialogOptions
     );
@@ -30,7 +30,7 @@ class FormDialogModule {
     });
   }
 
-  onOk() {
+  onAction() {
     let data;
     let valid = this.form.validate();
     if (!valid) {
@@ -38,13 +38,14 @@ class FormDialogModule {
     }
 
     data = this.form.getData();
-    this.action(data)
-      .then(response => {
-        this.close();
-      })
-      .fail(error => {
-        this.form.showError(error);
-      });
+    this.action(data);
+    // .then(response => {
+    //   console.warn(response);
+    //   this.close();
+    // })
+    // .fail(error => {
+    //   this.form.showError(error);
+    // });
   }
 
   close() {

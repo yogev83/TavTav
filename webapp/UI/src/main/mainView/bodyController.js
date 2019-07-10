@@ -6,6 +6,11 @@ class BodyController {
   constructor($view) {
     this.$view = $view;
     this.session = null;
+    this.auth = new GoTrue({
+      APIUrl: "https://tavtav.netlify.com/.netlify/identity",
+      audience: "",
+      setCookie: false
+    });
   }
 
   start(onLogin) {
@@ -19,14 +24,15 @@ class BodyController {
   }
 
   openLoginDialog() {
-    let login = new LoginModule(this.$view).create(session => {
-      this.session = session;
-      this.onLogin(session);
-    }, this.openRegisterDialog.bind(this));
+    netlifyIdentity.open();
+    // let login = new LoginModule(this.$view, this.auth).create(session => {
+    //   this.session = session;
+    //   this.onLogin(session);
+    // }, this.openRegisterDialog.bind(this));
   }
 
   openRegisterDialog() {
-    let register = new RegisterModule(this.$view).create();
+    let register = new RegisterModule(this.$view, this.auth).create();
   }
 }
 

@@ -3,8 +3,10 @@ import mockServer from "../../../mockServer/mockServer";
 import FormFieldValidators from "../../common/form/formFieldValidators";
 import FormFieldValidation from "../../common/form/fromFieldValidation";
 
+import GoTrue from "gotrue-js";
+
 class RegisterModule extends FormDialogModule {
-  constructor($container) {
+  constructor($container, auth) {
     super($container);
     this.formTemplate = "registerForm";
     this.dialogOptions = {
@@ -17,11 +19,16 @@ class RegisterModule extends FormDialogModule {
         password: this.passwordValidation
       }
     };
+    this.auth = auth;
   }
 
   action(data) {
-    let userService = mockServer.getService("user");
-    return userService.register(data);
+    //  let userService = mockServer.getService("user");
+    this.auth
+      .signup(data.email, data.password)
+      .then(response => console.log("Confirmation email sent", response))
+      .catch(error => console.log("It's an error", error));
+    //return userService.register(data);
   }
 
   passwordValidation(passwordValue) {

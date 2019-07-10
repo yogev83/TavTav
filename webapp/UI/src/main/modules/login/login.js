@@ -1,14 +1,17 @@
 import mockServer from "../../../mockServer/mockServer";
 import FormDialogModule from "../formDialog/formDialog";
 
+import GoTrue from "gotrue-js";
+
 class LoginModule extends FormDialogModule {
-  constructor($container) {
+  constructor($container, auth) {
     super($container);
     this.formTemplate = "loginForm";
     this.dialogOptions = {
       className: "login-dialog",
       okLabel: "Login"
     };
+    this.auth = auth;
   }
 
   create(onLogin, onNotRegisterdClick) {
@@ -26,10 +29,13 @@ class LoginModule extends FormDialogModule {
   }
 
   action(data) {
-    let userService = mockServer.getService("user");
-    return userService.login(data).then(session => {
-      this.handler(session);
+    // let userService = mockServer.getService("user");
+    return this.auth.login(email, password).then(response => {
+      this.handler(response.access_token);
     });
+    // return userService.login(data).then(session => {
+    //   this.handler(session);
+    // });
   }
 }
 

@@ -1,13 +1,13 @@
 import Utils from "../../common/utils";
 
 class Dialog {
-  constructor(onOk, onClose, options) {
+  constructor(onAction, onClose, options) {
     this.$dialogElement = null;
     this.$dialogContent = null;
     this.$errorContainer = null;
     this.$cancelButton = null;
     this.$okButton = null;
-    this.onOk = onOk;
+    this.onAction = onAction;
     this.onClose = onClose;
     this.options = options;
   }
@@ -53,7 +53,7 @@ class Dialog {
 
     this.$okButton.mouseup(() => {
       this.$okButton.removeClass("active");
-      this.onOk();
+      this.onAction();
     });
   }
 

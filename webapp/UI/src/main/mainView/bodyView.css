@@ -1,5 +1,5 @@
 div#main-view {
-  height: calc(100% - 60px);
+  height: calc(100% - 50px);
   background: url("assets/background.jpg");
   background-size: cover;
   background-repeat: no-repeat;
